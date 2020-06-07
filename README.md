@@ -2,9 +2,27 @@
 
 This is an implementation of the  the SVGF algorithm ([Schied et al. 2017][SVGF]) for denoising ray traced images with low sample count.
 
+## Modifications
+
+A few simplifications are made from the original algorithm:
+
+- This implementation does not separate direct and indirect lighting
+- It is also only made to tackle static scenes, i.e. there are no motion vectors
+- There is also no use of mesh IDs to accumulate samples correctly, which is less of a problem when the scene is assumed static.
+
 ## Sample Results
 
-These results are obtained on a laptop with GeForce GTX 960M:
+The following shows a ray traced scene with one ray sample per pixel, without denoising
+
+![Original, non-denoised rendering](nondenoised.png)
+
+The following shows the same image, after denoising has been applied:
+
+![Denoised rendering](denoised.png)
+
+The algorithm uses buffers containing world-positions, surface normals and albedo for each pixel, as well as samples from previous frames to generate the result.
+
+These performance results are obtained on a laptop with GeForce GTX 960M:
 
 
 ```
@@ -40,7 +58,9 @@ These results are obtained on a laptop with GeForce GTX 960M:
    Total  : 3050.049 ms
 ```
 
-The code is not thoroughly optimized due to time constraints, but
+The code is not thoroughly optimized due to time constraints.
+
+When run on desktop hardware, the algorithm is fit for more than 60 frames per second.
 
 ## Acknowledgements
 
