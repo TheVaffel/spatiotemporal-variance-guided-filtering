@@ -5,12 +5,26 @@
 #include "OpenImageIO/imageio.h"
 
 #include <iostream>
+#include <fstream>
 
 #include "CLUtils/CLUtils.hpp"
 
 #include <glm/glm.hpp>
+#include <nlohmann/json.hpp>
 
-namespace OpenImageIO = OIIO;
+namespace json = nlohmann; 
+
+json::json getProfileArray(clutils::ProfilingInfo<NUM_FRAMES - 1>& profile) {
+    json::json arr = json::json::array();
+
+
+    for(int i = 0; i < NUM_FRAMES - 1; i++) {
+	arr.push_back(profile[i]);
+    }
+
+    return arr;
+}
+
 
 int main() {
 
@@ -199,8 +213,18 @@ int main() {
     profile_info_atrous.print(std::cout);
     profile_info_total.print(std::cout);
 
-    writeOutputImages(image_data, "output/output");
+    writeOutputImages(image_data, std::string(OUTPUT_FILE_NAME));
     
+    json::json time_obj = {};
+    time_obj["reproject"] = getProfileArray(profile_info_reproject);
+    time_obj["variance"] = getProfileArray(profile_info_variance);
+    time_obj["atrous"] = getProfileArray(profile_info_atrous);
+    time_obj["total"] = getProfileArray(profile_info_total);
+
+    std::ofstream time_file(std::string(OUTPUT_FILE_NAME) + "_performance_results.txt");
+    time_file << std::setw(4) << time_obj << std::endl;
+    time_file.close();
+
     return 0;
     
 }

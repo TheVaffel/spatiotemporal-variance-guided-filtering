@@ -276,11 +276,11 @@ namespace clutils
             // Create a program object from the source codes, targeting context 0
             programs.emplace_back (contexts[0], sources);
 
-            /* try
-	       { */
+            try
+	       { 
                 // Build the program for all devices in context 0 (platform 0)
-	    cl_int res = programs[0].build (devices[0], build_options);
-		/* }
+	    programs[0].build (devices[0], build_options);
+		}
             catch (const cl::Error &error)
             {
                 std::cerr << error.what ()
@@ -291,11 +291,7 @@ namespace clutils
                 std::cout << log << std::endl;
 
                 exit (EXIT_FAILURE);
-		} */
-	    if(res != CL_SUCCESS) {
-		std::cerr << "Error compiling kernel" << std::endl;
-		exit(-1);
-	    }
+	}
 
             // Get the kernel names
             // Note: getInfo returns a ';' delimited string.
@@ -589,14 +585,14 @@ namespace clutils
             std::vector<cl::Device> devs = contexts[ctxIdx].getInfo<CL_CONTEXT_DEVICES> ();
             size_t pgIdx = programs.size () - 1;
 
-            // try
-            // {
+            try
+            {
 	    cl_int res = programs[pgIdx].build (devs, build_options);
 	    if(res != CL_SUCCESS) {
 		std::cout << "Error adding program" << std::endl;
 		exit(-1);
 	    }
-		/* }
+		}
             catch (const cl::Error &error)
             {
                 std::cerr << error.what ()
@@ -607,7 +603,7 @@ namespace clutils
                 std::cout << log << std::endl;
 
                 exit (EXIT_FAILURE);
-		} */
+		}
 
             // Get the kernel names
             // Note: getInfo returns a ';' delimited string.
