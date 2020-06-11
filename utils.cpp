@@ -149,6 +149,9 @@ void writeOutputImages(const ImageData& image_data, const std::string& output_fi
 }
 
 
+
+// Copied from https://stackoverflow.com/questions/24326432/convenient-way-to-show-opencl-error-codes
+
 const char *getErrorString(cl_int error)
 {
     switch(error){
