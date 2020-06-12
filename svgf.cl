@@ -407,7 +407,7 @@ __kernel void atrous(const __global float* restrict curr_normals,
     if(last_time == 1) {
 	float3 alb = load_float3(albedo, linear_pixel);
 
-	float3 modulated = pow(alb * total_accum, 1.0 / 2.2);
+	float3 modulated = clamp(linear_to_srgb(alb * total_accum), 0.0f, 1.0f);
         
 	store_float3(output_image, linear_pixel, modulated);
     } else {
