@@ -90,7 +90,7 @@ __kernel void reproject(const __global float* restrict input_noise,
 			const int frame_number) {
 
     
-    const float NORMAL_TOLERANCE = 0.4;
+    const float NORMAL_TOLERANCE = 5.0e-2;
     const float POSITION_TOLERANCE = 1e-2;
     
     const int2 gid = {get_global_id(0), get_global_id(1)};
@@ -216,7 +216,7 @@ __kernel void compute_variance(const __global float* restrict curr_normals,
 			       const __global float* restrict curr_util,
 			       __global float* restrict output_image) {
     
-    const float NORMAL_PHI = 3e-1;
+    const float NORMAL_PHI = 1e-2;
     // const float POSITION_PHI = 1e0; // Should depend on depth, but oh well
     const float COLOR_PHI = 1.0e1;
 
@@ -329,7 +329,7 @@ __kernel void atrous(const __global float* restrict curr_normals,
     const float POSITION_PHI = 1.0; // Should depend on depth, but oh well
     const float COLOR_PHI = 10.0; */
 
-    const float NORMAL_PHI = 0.3;
+    const float NORMAL_PHI = 1e-2;
     // const float POSITION_PHI = 3e0; // Should depend on depth, but oh well
     const float COLOR_PHI = 1.0e1;
     
