@@ -90,8 +90,8 @@ __kernel void reproject(const __global float* restrict input_noise,
 			const int frame_number) {
 
     
-    const float NORMAL_TOLERANCE = 0.9;
-    const float POSITION_TOLERANCE = 1e-3;
+    const float NORMAL_TOLERANCE = 0.4;
+    const float POSITION_TOLERANCE = 1e-2;
     
     const int2 gid = {get_global_id(0), get_global_id(1)};
     const int linear_pixel = linear(gid);
@@ -216,8 +216,8 @@ __kernel void compute_variance(const __global float* restrict curr_normals,
 			       const __global float* restrict curr_util,
 			       __global float* restrict output_image) {
     
-    const float NORMAL_PHI = 1e1;
-    const float POSITION_PHI = 30.0; // Should depend on depth, but oh well
+    const float NORMAL_PHI = 3e-1;
+    // const float POSITION_PHI = 1e0; // Should depend on depth, but oh well
     const float COLOR_PHI = 1.0e1;
 
     const int2 gid = {get_global_id(0), get_global_id(1)};
@@ -234,7 +234,7 @@ __kernel void compute_variance(const __global float* restrict curr_normals,
     float moment = util_load.y;
     float linear_z = util_load.z;
 
-    float phiDepth = max(5e-1, 1e-8) * 3.0;
+    float phiDepth = max(5e-3, 1e-8) * 3.0;
 
     float sum_weights = 0.0;
     float sum_moment = 0.0;
@@ -325,9 +325,13 @@ __kernel void atrous(const __global float* restrict curr_normals,
 		     int step_size,
 		     int last_time) {
     
-    const float NORMAL_PHI = 3e-2;
+    /* const float NORMAL_PHI = 3e-2;
     const float POSITION_PHI = 1.0; // Should depend on depth, but oh well
-    const float COLOR_PHI = 10.0;
+    const float COLOR_PHI = 10.0; */
+
+    const float NORMAL_PHI = 0.3;
+    // const float POSITION_PHI = 3e0; // Should depend on depth, but oh well
+    const float COLOR_PHI = 1.0e1;
     
     const float kernelWeights[3] = { 1.0, 2.0 / 3.0, 1.0 / 6.0 };
 
@@ -349,7 +353,7 @@ __kernel void atrous(const __global float* restrict curr_normals,
     float linear_z = util_load.z;
     
     float phi_color = COLOR_PHI * sqrt(max(0.0f, 1e-10f + var));
-    float phiDepth = max(9e-3, 1e-8) * step_size;
+    float phiDepth = max(5e-3, 1e-8) * step_size;
 
     // Store center pixel with weight 1:
     float sum_weights = 1.0;
